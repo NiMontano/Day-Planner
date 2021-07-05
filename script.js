@@ -1,17 +1,13 @@
 myStorage = window.localStorage
 
 var today = moment();
-console.log(today);
-$("#currentDay").text(today.format("dddd, MMMM Do"));
-
 var currentHr = moment().hour();
-console.log (currentHr);
 
 var plannerHr = document.querySelectorAll("div.row");
-console.log(plannerHr.length);
-
 var saveButton= document.querySelectorAll("button");
-console.log(saveButton);
+
+$("#currentDay").text(today.format("dddd, MMMM Do"));
+
 
 function findTime() {
 for (let i = 0; i < plannerHr.length; i++) {
@@ -31,25 +27,38 @@ for (let i = 0; i < plannerHr.length; i++) {
     };
 };
 
+function showDay() {
+  for (let i = 0; i < myStorage.length; i++) {
+    j= 0;
+    for (let j = 0; j < plannerHr.length; j++){
+      if (myStorage.key([i]) == plannerHr[j].id) {
+        var savedEvent = myStorage.getItem(myStorage.key([i]));
+        plannerHr[j].setAttribute("type","text");
+        plannerHr[j].children[1].innerHTML = savedEvent;
+
+        console.log(plannerHr[j].children);
+      };
+    };
+  };
+}
+
 function clickSave() {
   for (let i = 0; i < saveButton.length; i++ ) {
     saveButton[i].addEventListener("click", function(){
       var newEvent = this.previousElementSibling.value;
       var clickedId = this.parentElement.id;
-
       myStorage.setItem(clickedId, newEvent);
-      for (let i = 0; i < this.children.length; i++){
-        this.children[i].className = "bi bi-lock";
-      }
 
-      // myStorage.setItem()
-      console.log(this.children[0]);
+      for (let i = 0; i < this.children.length; i++){
+        this.children[i].className = "bi bi-lock-fill";
+      };
     });
   };
-};
+}
 
 
 findTime();
+showDay();
 clickSave();
 
 
